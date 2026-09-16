@@ -3,13 +3,13 @@ import UIKit
 import Reachability
 import CoreTelephony
 
-public class SwiftConnectionNetworkTypePlugin: NSObject, FlutterPlugin {
+public class ConnectionNetworkTypePlugin: NSObject, FlutterPlugin {
   
   private var reachability: Reachability?
   private var eventSink: FlutterEventSink?
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "connection_network_type", binaryMessenger: registrar.messenger())
-    let instance = SwiftConnectionNetworkTypePlugin()
+    let instance = ConnectionNetworkTypePlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
 
     let streamChannel = FlutterEventChannel(name: "connection_network_type_status", binaryMessenger: registrar.messenger())
@@ -25,7 +25,7 @@ public class SwiftConnectionNetworkTypePlugin: NSObject, FlutterPlugin {
   }
 }
 
-extension SwiftConnectionNetworkTypePlugin: FlutterStreamHandler {
+extension ConnectionNetworkTypePlugin: FlutterStreamHandler {
   public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
     // Add notification
     NotificationCenter.default.addObserver(self, selector:#selector(networkStatusChange(_:)) , name: .reachabilityChanged, object: nil)

@@ -45,6 +45,20 @@ The main difference is that the code has been refactored to remove the need to m
     });
 ```
 
+## iOS: Swift Package Manager
+
+Starting with version 2.0.0 the iOS implementation is distributed only as a Swift package; CocoaPods is no longer supported. Your app needs Flutter 3.44 or later, where Swift Package Manager is enabled by default. If it has been disabled in your Flutter config, re-enable it with:
+
+```bash
+flutter config --enable-swift-package-manager
+```
+
+The minimum iOS deployment target is 13.0. Apps that have Swift Package Manager turned off (`flutter config --no-enable-swift-package-manager`) must stay on version 1.x. Apps with Swift Package Manager enabled can keep using other CocoaPods-only plugins alongside this one; Flutter falls back to CocoaPods for those.
+
+One caveat for such mixed apps: this plugin pulls [Reachability.swift](https://github.com/ashleymills/Reachability.swift) through Swift Package Manager. If another CocoaPods-only plugin in your app depends on the `ReachabilitySwift` pod, the app ends up with two copies of the `Reachability` module and iOS logs a duplicate-class warning at launch. It built and ran correctly in our tests, but prefer plugins that also use Swift Package Manager so both resolve to one package.
+
+Add-to-app projects are not supported either: `flutter build ios-framework` still forces CocoaPods on current Flutter versions, so it cannot consume a Swift-package-only plugin. Those projects must stay on version 1.x.
+
 ## Getting Started
 
 This project is a starting point for a Flutter

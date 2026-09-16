@@ -1,11 +1,11 @@
 name: connection_network_type
 description: This plugin allows Flutter apps to detect network changes and the type of network connection.
-version: 1.0.1
+version: 2.0.0
 homepage: https://github.com/carlosgabrielmelo/connection_network_type
 
 environment:
-  sdk: ">=2.18.1 <4.0.0"
-  flutter: ">=2.5.0"
+  sdk: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.0"
 
 dependencies:
   flutter:
