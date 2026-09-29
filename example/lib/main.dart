@@ -19,6 +19,7 @@ class _MyAppState extends State<MyApp> {
   String _networkStatus = NetworkStatus.unreachable.name;
   final ConnectionNetworkType _connectionNetworkTypePlugin =
       ConnectionNetworkType();
+  StreamSubscription<NetworkStatus>? _networkSubscription;
 
   @override
   void initState() {
@@ -43,7 +44,7 @@ class _MyAppState extends State<MyApp> {
     try {
       networkStatus = await _connectionNetworkTypePlugin.currentNetworkStatus();
     } on PlatformException {
-      networkStatus = NetworkStatus.unreachable;
+      networkStatus = NetworkStatus.unknown;
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -57,8 +58,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initPlatformNetworkListen() {
-    _connectionNetworkTypePlugin.onNetworkStateChanged
-        .listen((NetworkStatus networkStatus) {
+    _networkSubscription = _connectionNetworkTypePlugin.onNetworkStateChanged.listen((
+      NetworkStatus networkStatus,
+    ) {
       if (networkStatus.name != _networkStatus) {
         // If the widget was removed from the tree while the asynchronous platform
         // message was in flight, we want to discard the reply rather than calling
@@ -73,15 +75,17 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  void dispose() {
+    _networkSubscription?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('Running on: $_networkStatus\n'),
-        ),
+        appBar: AppBar(title: const Text('Plugin example app')),
+        body: Center(child: Text('Running on: $_networkStatus\n')),
       ),
     );
   }
